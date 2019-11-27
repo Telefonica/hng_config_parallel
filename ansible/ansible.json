@@ -1,0 +1,46 @@
+{
+  "variables": {
+    "ansible_host": "default",
+    "ansible_connection": "docker",
+    "image_name": "ansible",
+    "image_version": "2.9.0-1",
+    "tmp_dir": "/tmp/"
+  },
+  "builders": [
+    {
+      "type": "docker",
+      "image": "debian:bullseye-slim",
+      "commit": "true",
+      "run_command": [
+        "-d",
+        "-i",
+        "-t",
+        "--name",
+        "{{user `ansible_host`}}",
+        "{{.Image}}",
+        "/bin/sh"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+    	"type": "ansible",
+    	"user": "root",
+        "playbook_file": "./playbook.yml",
+        "extra_arguments": [
+        "--extra-vars",
+        "ansible_host={{user `ansible_host`}} ansible_connection={{user `ansible_connection`}}"
+        ]
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "dockerhub.hi.inet/networkcloud/{{user `image_name`}}",
+        "tag": "{{user `image_version`}}"
+      },
+      "docker-push"
+    ]
+  ]
+}

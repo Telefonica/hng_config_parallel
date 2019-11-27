@@ -1,0 +1,5 @@
+---
+- name: Clear cache
+  file: 
+    path: /var/cache/apk/*
+    state: absent

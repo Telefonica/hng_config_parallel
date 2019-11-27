@@ -1,0 +1,45 @@
+---
+- name: Install trigger dependencies
+  become: yes
+  pip:
+    state: latest
+    name:
+      - setuptools
+      - wheel
+      - ntc-ansible
+      - click
+      - cryptography
+      - textfsm
+      - netmiko
+      - terminal
+
+- name: Install lxml
+  become: yes
+  apt:
+    state: latest
+    name:
+      - zlib1g-dev
+      - libxml2-dev
+      - libxslt-dev
+      - python-dev
+
+- name: Clone trigger
+  become: yes
+  git:
+    repo: 'https://github.com/trigger/trigger.git'
+    dest: '/tmp/trigger'
+
+- name: Install trigger
+  become: yes
+  shell: |
+    cd /tmp/trigger
+    python setup.py install
+
+- name: Fix bug related to ntc_ansible
+  file:
+    state: absent
+    path: "{{ item }}"
+  loop:  
+    - /usr/share/ansible/plugins/modules/ntc-ansible/setup.cfg
+    - /usr/share/ansible/plugins/modules/ntc-ansible/setup.py
+    - /usr/share/ansible/plugins/modules/ntc-ansible/ntc-templates/setup.py

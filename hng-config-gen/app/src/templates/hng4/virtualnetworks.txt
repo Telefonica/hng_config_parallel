@@ -1,0 +1,25 @@
+{% for virtualnetwork in hngv4.virtualnetworks %}
+   virtual-network {{ virtualnetwork.name }}
+   {% for iface in virtualnetwork.interfaces %}
+     {% if iface.type == 'local' %}
+       interface {{ iface.name }} type local address {{ iface.ip }} netmask {{ iface.netmask }} node {{ iface.node }} port {{ iface.port }}
+     {% else %}
+       interface {{ iface.name }} type floating address {{ iface.ip }} port {{ iface.port}}
+     {% endif %}
+     {% if iface.description %}
+       description {{ iface.description }}
+     {% endif %}
+   {% endfor %}
+   {% if virtualnetwork.srouting %}
+     route address 0.0.0.0 netmask 0.0.0.0 gateway {{ virtualnetwork.srouting.gateway }}
+   {% endif %}
+   {% if virtualnetwork.prouting %}
+     policy-routing
+     {% for rtable in virtualnetwork.prouting.rtables %}
+       route-table {{ rtable.name }} route address 0.0.0.0 netmask 0.0.0.0 gateway {{ rtable.gateway }} port {{ rtable.port }}
+     {% endfor %}
+     {% for rule in virtualnetwork.rules %}
+       rule priority {{ rule.priority }} table {{ rule.rtable }} source {{ rule.source }}
+     {% endfor %}
+   {% endif %}
+{% endfor %}

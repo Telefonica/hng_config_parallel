@@ -1,0 +1,142 @@
+#
+#  We assume basics a basic common config is already provisioned
+#  in all the VNFs
+#
+#
+hng: 
+  certificates:
+    pki: false
+  pports:
+    - vport: vCORE
+      type: vlan
+      id: 300
+      port: eth3
+    - vport: vACC
+      type: vlan
+      id: 299
+      port: eth2
+  sports:
+    - vport: vCORE
+      type: vlan
+      id: 300
+      port: eth3
+    - vport: vACC
+      type: vlan
+      id: 299
+      port: eth2
+  pinterfaces:
+    - interface: pOAM
+      port: eth0
+      ip: 192.168.10.12
+      netmask: 255.255.255.0
+      broadcast: 192.168.10.255
+    - interface: pHA
+      port: eth1
+      ip: 192.168.11.8
+      netmask: 255.255.255.0
+      broadcast: 192.168.11.255
+    - interface: pRAN
+      ip: 192.168.12.6 
+      netmask: 255.255.255.0
+      broadcast: 192.168.12.255
+      port: eth2
+    - interface: pCORE
+      ip: 192.168.13.6 
+      netmask: 255.255.255.0
+      broadcast: 192.168.13.255
+      port: eth3
+    - interface: pSON
+      port: lo
+      ip: 192.168.12.15
+      netmask: 255.255.255.255
+  sinterfaces:
+    - interface: sOAM
+      port: eth0
+      ip:  192.168.10.3
+      netmask: 255.255.255.0
+      broadcast: 192.168.10.255
+    - interface: sHA
+      port: eth1
+      ip: 192.168.11.10
+      netmask: 255.255.255.0
+      broadcast: 192.168.11.255
+    - interface: sRAN
+      ip: 192.168.12.3 
+      netmask: 255.255.255.0 
+      broadcast: 192.168.12.255
+      port: eth2
+    - interface: sCORE
+      ip: 192.168.13.7 
+      netmask: 255.255.255.0
+      broadcast: 192.168.13.255
+      port: eth3
+    - interface: sSON
+      port: lo
+      ip:  192.168.12.15
+      netmask: 255.255.255.255 
+  virtualnetworks:
+    - name: toparip
+      interface: 
+        name: fl-toparip  
+        ip:  192.168.13.8
+        description: Link to the parent HNG or EPC.
+      prouting:
+        rtable: PRUEBA
+        gateway: 192.168.13.5 
+        port: eth3
+      rule: 
+        priority: 201
+        table: PRUEBA
+      sctp:
+        endpoint: toparip-S1C
+      gtpu:
+        endpoint: toparip-S1U
+    - name: tokidip
+      interface: 
+        name: fl-tokidip  
+        ip: 192.168.12.8 
+        description: Link to the child HNG or eNodeB.
+      prouting:
+        rtable: tokidip
+        gateway: 192.168.12.5
+        port: eth2
+      rule: 
+        priority: 202
+        table: tokidip
+      ipsec:
+        name: acc-ipsecgw
+        ip: 192.168.12.8 
+        profile: default
+      son:
+        name: acc-SON
+        ip: 192.168.12.15
+      sctp:
+        endpoint: tokidip-S1C
+      gtpu:
+        endpoint: tokidip-S1U
+  cluster:
+    piface : 192.168.11.8
+    siface : 192.168.11.10
+    admin : disabled
+    fencing : disabled
+  core:
+    name: Parent
+    ipaddr: 192.168.13.2
+    port: 36412
+  gateway:
+    name: LAB
+    band: band28Lte
+    access: 
+      name: tokidip
+      sctp:
+        iface: tokidip-S1C
+      gtpu: 
+        iface: tokidip-S1U
+    core: 
+      name: toparentip
+      mme: Parent
+      sctp:
+        iface: toparentip-S1C
+      gtpu:
+        iface: toparentip-S1U
+

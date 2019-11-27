@@ -1,0 +1,14 @@
+config terminal
+
+certificates use-pki False
+
+system node primary hostname tefhng01
+
+port eth0 type physical
+
+virtual-network oAM
+interface OAMp type local address 192.168.121.237 netmask 255.255.255.0 node primary port eth0
+route address 0.0.0.0 netmask 0.0.0.0 gateway 192.168.121.1
+
+end
+exit

@@ -1,0 +1,11 @@
+{% for port in hng.ports %}
+   port {{ port.port }}
+   {% if port.type == 'vlan' %}
+     type	   {{ port.type }}
+     vlan-id   {{ port.id }} 
+     vlan-port {{ port.iface }}
+   {% endif %}
+   {% if port.description %}
+     description {{ port.description }}
+   {% endif %}
+{% endfor %}

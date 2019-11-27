@@ -1,0 +1,12 @@
+---
+- name: Install python-pip
+  apt:
+    update_cache: "yes"
+    state: present
+    name:
+      - python-pip
+
+- name: Install ansible
+  pip:
+    name: ansible
+    state: present

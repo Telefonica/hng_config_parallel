@@ -1,0 +1,54 @@
+{
+  "variables": {
+    "ansible_host": "default",
+    "ansible_connection": "docker",
+    "image_name": "testinfra",
+    "image_version": "3.2.0"
+  },
+  "builders": [
+    {
+      "type": "docker",
+      "image": "alpine:3.10",
+      "commit": "true",
+      "changes": [
+          "ENTRYPOINT [\"/usr/bin/py.test\"]"
+      ],
+      "run_command": [
+        "-d",
+        "-i",
+        "-t",
+        "--name",
+        "{{user `ansible_host`}}",
+        "{{.Image}}",
+        "/bin/sh"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "apk add --no-cache python3"
+      ]
+    },
+    {
+      "type": "ansible",
+      "user": "root",
+      "playbook_file": "./playbook.yml",
+      "extra_arguments": [
+        "--extra-vars",
+        "ansible_host={{user `ansible_host`}} ansible_connection={{user `ansible_connection`}} testinfra_version={{user `image_version`}}"
+      ]
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "dockerhub.hi.inet/networkcloud/{{user `image_name`}}",
+        "tag": "{{user `image_version`}}"
+      },
+      "docker-push"
+    ]
+  ]
+}

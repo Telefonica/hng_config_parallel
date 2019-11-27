@@ -1,0 +1,7 @@
+---
+- name: Install pip requirements
+  gather_facts: no
+  hosts: all
+  roles:
+    - requirements
+    - copy-files

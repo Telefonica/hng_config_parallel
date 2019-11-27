@@ -1,0 +1,21 @@
+{% if hngv4.venb %}
+  {% for mme in hngv4.venb.mmes %}
+    venb peers mme {{ mme.name }} peer-sctp-endpoint bind-address {{ mme.addr }} primary {{ mme.pri }}
+  {% endfor %}   
+  mme-pool {{ hngv4.venb.pool.name }} group-id {{  hngv4.venb.pool.id }} 
+  {% for mme in hngv4.venb.pool.mmes %}
+    mme {{ mme.name }} code {{ mme.code }} admin-state enabled
+  {% endfor %}
+  {% if hngv4.venb.instance %}
+    instance {{ hngv4.venb.instance.name }} zone {{ hngv4.venb.instance.zone }} enb-id {{ hngv4.venb.instance.id }} venb-profile {{ hngv4.venb.instance.profile }}
+    {% if hngv4.venb.instance.acc %}
+      access s1 gtpu-endpoint virtual-network {{ hngv4.venb.instance.acc.vnet }} bind-address hngv4.venb.instance.acc.gtpaddr }} port 2152
+      sctp-endpoint virtual-network {{ hngv4.venb.instance.acc.vnet }} profile default bind-address {{ hngv4.venb.instance.acc.sctpaddr }} primary true
+    {% endif %}
+    {% if hngv4.venb.instance.core %}
+      core s1 gtpu-endpoint virtual-network {{ hngv4.venb.instance.core.vnet }} bind-address {{ hngv4.venb.instance.core.vnet.gtpaddr }} port 2152
+      sctp-endpoint virtual-network {{ hngv4.venb.instance.core.vnet }} profile default bind-address {{ hngv4.venb.instance.core.vnet.sctpaddr }} primary true
+      mme-pool {{ hngv4.venb.pool.name }} admin-state enabled
+    {% endif %}
+  {% endif %}  
+{% endif %}

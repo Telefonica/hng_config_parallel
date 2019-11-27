@@ -1,0 +1,7 @@
+{% if hng.cluster %}
+system cluster node primary interface {{ hng.cluster.piface }} 
+system cluster node secondary interface {{ hng.cluster.siface }} 
+system cluster admin-state {{ hng.cluster.admin }}
+system cluster fencing-state {{ hng.cluster.fencing }}
+!
+{% endif %}

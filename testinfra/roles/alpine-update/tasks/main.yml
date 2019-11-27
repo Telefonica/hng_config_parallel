@@ -1,0 +1,5 @@
+---
+- name: Upgrade packages
+  apk:
+    available: yes
+    upgrade: yes

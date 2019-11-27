@@ -1,0 +1,7 @@
+---
+- name: Install openssh-client
+  apt:
+    update_cache: "yes"
+    state: present
+    name:
+      - openssh-client

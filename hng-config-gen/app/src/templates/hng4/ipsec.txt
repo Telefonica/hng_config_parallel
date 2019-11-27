@@ -1,0 +1,5 @@
+{% if hngv4.ipsec %}
+  {% for endpoint in hngv4.ipsec.endpoints %}
+    ipsec-endpoints ikev2-endpoint {{ endpoint.name }} virtual-network {{ endpoint.vnet }} bind-address {{ endpoint.addr }} profile default
+  {% endfor %}
+{% endif %}

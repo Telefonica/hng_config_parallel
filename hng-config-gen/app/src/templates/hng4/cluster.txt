@@ -1,0 +1,6 @@
+{% if hngv4.cluster %}
+cluster node primary redundancy-interface virtual-network {{ hngv4.cluster.vnet }} address {{ hngv4.cluster.paddr }}
+cluster node secondary redundancy-interface virtual-network {{ hngv4.cluster.vnet }} address {{ hngv4.cluster.saddr }} 
+cluster admin-state {{ hngv4.cluster.admin }}
+cluster fencing-state {{ hngv4.cluster.fencing }}
+{% endif %}

@@ -1,0 +1,10 @@
+---
+- name: Bootstrap dnsmasq alpine container
+  gather_facts: no
+  hosts: all
+  roles:
+    - alpine-update
+    - alpine-pip
+    - alpine-ssh
+    - alpine-testinfra
+    - alpine-cleanup

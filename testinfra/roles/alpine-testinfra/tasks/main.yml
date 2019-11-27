@@ -1,0 +1,5 @@
+---
+- name: Install testinfra
+  pip:
+    executable: pip3
+    name: testinfra=={{ testinfra_version }}

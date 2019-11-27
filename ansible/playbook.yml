@@ -1,0 +1,8 @@
+---
+- name: Bootstrap debian ansible container
+  gather_facts: no
+  hosts: all
+  roles:
+    - debian-python
+    - debian-ansible
+    - debian-openssh-client

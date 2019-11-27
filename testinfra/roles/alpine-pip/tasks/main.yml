@@ -1,0 +1,5 @@
+---
+- name: Install py3-setuptools
+  apk:
+    name: py3-setuptools
+    state: latest

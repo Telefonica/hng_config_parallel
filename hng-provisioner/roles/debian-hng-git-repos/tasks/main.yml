@@ -1,0 +1,13 @@
+---
+- name: Clone git repositories
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ item.dest }}"
+    recursive: "{{ item.recursive }}"
+    version: "{{ item.version }}"
+    depth: 1
+    force: yes
+    accept_hostkey: yes
+  loop:
+      - { repo: 'https://github.com/networktocode/ntc-ansible', dest: '/usr/share/ansible/plugins/modules/ntc-ansible/', recursive: 'yes', version: 'master' }
+

@@ -1,0 +1,14 @@
+! gateway configuration
+{% if hng.gateway %}
+!
+gateway operator-network {{ hng.gateway.name }} call-control admin-state enabled
+! 
+lte access s1ap-layer virtual-network {{ hng.gateway.access.name }} intf {{ hng.gateway.access.sctp.iface }}
+!
+lte access gtpu-layer virtual-network {{ hng.gateway.access.name }} intf {{ hng.gateway.access.gtpu.iface }}
+!   
+lte core gtpu-layer virtual-network {{ hng.gateway.core.name }} intf {{ hng.gateway.core.gtpu.iface }}
+!
+lte core s1ap-layer virtual-network {{ hng.gateway.core.name }} intf {{ hng.gateway.core.sctp.iface }} 
+lte core s1ap-layer mme {{ hng.gateway.core.mme }} admin-state enabled
+{% endif %}

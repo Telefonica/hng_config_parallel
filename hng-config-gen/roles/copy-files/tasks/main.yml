@@ -1,0 +1,13 @@
+---
+- name: Create app dir if it does not exist
+  file:
+    path: /gen
+    state: directory
+    mode: '0755'
+
+
+- name: copy critical files to docker dir
+  copy:
+    src: /app/
+    dest: /gen/
+    remote_src: yes

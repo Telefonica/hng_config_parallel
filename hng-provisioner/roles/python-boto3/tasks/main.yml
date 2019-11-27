@@ -1,0 +1,7 @@
+---
+- name: Install boto3
+  become: yes
+  pip:
+    state: latest
+    name:
+      - boto3

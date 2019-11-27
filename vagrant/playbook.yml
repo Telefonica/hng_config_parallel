@@ -1,0 +1,13 @@
+---
+- name: Bootstrap debian vagrant container
+  gather_facts: no
+  hosts: all
+  vars:
+    vagrant_url_deb: "https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.deb"
+    vagrant_tmp_deb: "/tmp"
+ 
+  roles:
+    - debian-python
+    - debian-vagrant
+    - debian-plugin
+    - debian-ansible

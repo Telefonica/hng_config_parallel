@@ -1,0 +1,3 @@
+{% if hngv4.system %}
+system node {{ hngv4.system.role }} hostname {{ hngv4.system.hostname }}
+{% endif %}

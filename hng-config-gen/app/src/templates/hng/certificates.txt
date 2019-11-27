@@ -1,0 +1,4 @@
+{% if hng.certificates %}
+certificates use-pki {{ hng.certificates.pki }}
+!
+{% endif %}

@@ -1,0 +1,123 @@
+#
+#  We assume basics a basic common config is already provisioned
+#  in all the VNFs
+#
+#
+hng: 
+  certificates:
+    pki: false
+  pinterfaces:
+    - interface: pOAM
+      port: eth0
+      ip: <%= data["ip_oam"]["value"][0] %>
+      netmask: <%= data["netmask_oam"]["value"][0] %>
+      broadcast: <%= data["bcast_oam"]["value"][0] %>
+    - interface: pHA
+      port: eth1
+      ip: <%= data["ip_ha"]["value"][0] %>
+      netmask: <%= data["netmask_ha"]["value"][0] %>
+      broadcast: <%= data["bcast_ha"]["value"][0] %>
+    - interface: pRAN
+      ip: <%= data["ip_ran"]["value"][0] %> 
+      netmask: <%= data["netmask_oam"]["value"][0] %>
+      broadcast: <%= data["bcast_ran"]["value"][0] %>
+      port: eth2
+    - interface: pCORE
+      ip: <%= data["ip_core"]["value"][0] %> 
+      netmask: <%= data["netmask_core"]["value"][0] %>
+      broadcast: <%= data["bcast_core"]["value"][0] %>
+      port: eth3
+    - interface: pSON
+      port: lo
+      ip: <%= data["ip_son"]["value"][0] %>
+      netmask: <%= data["netmask_son"]["value"][0] %>
+  sinterfaces:
+    - interface: sOAM
+      port: eth0
+      ip:  <%= data["ip_oam"]["value"][1]%>
+      netmask: <%= data["netmask_oam"]["value"][0] %>
+      broadcast: <%= data["bcast_oam"]["value"][0] %>
+    - interface: sHA
+      port: eth1
+      ip: <%= data["ip_ha"]["value"][1]%>
+      netmask: <%= data["netmask_ha"]["value"][0] %>
+      broadcast: <%= data["bcast_ha"]["value"][0] %>
+    - interface: sRAN
+      ip: <%= data["ip_ran"]["value"][1] %> 
+      netmask: <%= data["netmask_ran"]["value"][0] %> 
+      broadcast: <%= data["bcast_ran"]["value"][0] %>
+      port: eth2
+    - interface: sCORE
+      ip: <%= data["ip_core"]["value"][1] %> 
+      netmask: <%= data["netmask_core"]["value"][0] %>
+      broadcast: <%= data["bcast_core"]["value"][0] %>
+      port: eth3
+    - interface: sSON
+      port: lo
+      ip:  <%= data["ip_son"]["value"][0] %>
+      netmask: <%= data["netmask_son"]["value"][0] %> 
+  virtualnetworks:
+    - name: toparip
+      interface: 
+        name: fl-toparip  
+        ip:  <%= data["ip_fl_core"]["value"][0] %>
+        description: Link to the parent HNG or EPC.
+      prouting:
+        rtable: PRUEBA
+        gateway: <%= data["ip_gw_core"]["value"][0] %> 
+        port: eth3
+      rule: 
+        priority: 201
+        table: PRUEBA
+      sctp:
+        endpoint: toparip-S1C
+      gtpu:
+        endpoint: toparip-S1U
+    - name: tokidip
+      interface: 
+        name: fl-tokidip  
+        ip: <%= data["ip_fl_ran"]["value"][0] %> 
+        description: Link to the child HNG or eNodeB.
+      prouting:
+        rtable: tokidip
+        gateway: <%= data["ip_gw_ran"]["value"][0] %>
+        port: eth2
+      rule: 
+        priority: 202
+        table: tokidip
+      ipsec:
+        name: acc-ipsecgw
+        ip: <%= data["ip_fl_ran"]["value"][0] %> 
+        profile: default
+      son:
+        name: acc-SON
+        ip: <%= data["ip_son"]["value"][0] %>
+      sctp:
+        endpoint: tokidip-S1C
+      gtpu:
+        endpoint: tokidip-S1U
+  cluster:
+    piface : <%= data["ip_ha"]["value"][0] %>
+    siface : <%= data["ip_ha"]["value"][1] %>
+    admin : <%= data["cluster"]["value"][1] %>
+    fencing : <%= data["cluster"]["value"][0] %>
+  core:
+    name: Parent
+    ipaddr: <%= data["ip_mme"]["value"][0] %>
+    port: 36412
+  gateway:
+    name: LAB
+    band: band28Lte
+    access: 
+      name: tokidip
+      sctp:
+        iface: tokidip-S1C
+      gtpu: 
+        iface: tokidip-S1U
+    core: 
+      name: toparentip
+      mme: Parent
+      sctp:
+        iface: toparentip-S1C
+      gtpu:
+        iface: toparentip-S1U

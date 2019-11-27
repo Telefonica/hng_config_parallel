@@ -1,0 +1,20 @@
+hngv4:
+  certificates:
+    pki: false
+  system:
+    role: primary
+    hostname: tefhng01
+  ports:
+    - port: eth0
+      type: physical
+  virtualnetworks:
+    - name: oAM
+      interfaces:
+        - name: OAMp
+          type: local
+          ip:  192.168.121.237
+          netmask: 255.255.255.0
+          node: primary
+          port: eth0
+      srouting:
+        gateway: 192.168.121.1

@@ -1,0 +1,24 @@
+#
+#  We assume basics a basic common config is already provisioned
+#  in all the VNFs
+#  Test vlan creation
+#
+hng: 
+  pports:
+    - vport: vCORE
+      type: vlan
+      id: 300
+      port: eth3
+    - vport: vACC
+      type: vlan
+      id: 299
+      port: eth2
+  sports:
+    - vport: vCORE
+      type: vlan
+      id: 300
+      port: eth3
+    - vport: vACC
+      type: vlan
+      id: 299
+      port: eth2

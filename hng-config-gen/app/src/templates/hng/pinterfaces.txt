@@ -1,0 +1,10 @@
+{% for interface in hng.pinterfaces %}
+   {% if interface.netmask == '255.255.255.255' %}
+     interface {{ interface.interface }} address {{ interface.ip }} port {{ interface.port}} netmask {{ interface.netmask }} 
+   {% else %}
+     interface {{ interface.interface }} address {{ interface.ip }} port {{ interface.port}} netmask {{ interface.netmask }} broadcast {{ interface.broadcast }}
+   {% endif %}
+   {% if interface.description %}
+     description {{ interface.description }}
+   {% endif %}
+{% endfor %}

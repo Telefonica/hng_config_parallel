@@ -1,0 +1,9 @@
+---
+- name: Bootstrap debian ansible container
+  gather_facts: no
+  hosts: all
+  roles:
+    - debian-git
+    - debian-hng-git-repos
+    - debian-hng-trigger
+    - python-boto3

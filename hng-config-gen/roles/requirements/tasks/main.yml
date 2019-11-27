@@ -1,0 +1,4 @@
+---
+- name: install requirements
+  pip: 
+    requirements: /app/requirements.txt

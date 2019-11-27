@@ -1,0 +1,6 @@
+{% for vport in hng.pports %}
+   port {{ vport.vport }}
+   {{ vport.type }}
+   {{ vport.id }} 
+   {{ vport.port }}
+{% endfor %}

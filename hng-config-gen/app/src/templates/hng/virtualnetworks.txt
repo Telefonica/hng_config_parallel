@@ -1,0 +1,23 @@
+{% for virtualnetwork in hng.virtualnetworks %}
+   virtual-network {{ virtualnetwork.name }}
+   interface {{ virtualnetwork.interface.name }} address {{ virtualnetwork.interface.ip }} description "A test"
+   {% if virtualnetwork.prouting %}
+     policy-routing route-table {{ virtualnetwork.prouting.rtable }} route address 0.0.0.0 netmask 0.0.0.0 gateway {{ virtualnetwork.prouting.gateway }} port {{ virtualnetwork.prouting.port }}
+   {% endif %}
+   {% if virtualnetwork.rule %}
+     rule priority {{ virtualnetwork.rule.priority }} table {{ virtualnetwork.prouting.rtable }} source {{ virtualnetwork.interface.ip }}
+   {% endif %}
+   {% if virtualnetwork.ipsec %}
+     ipsec-intf {{ virtualnetwork.ipsec.name }} bind ipaddr {{ virtualnetwork.ipsec.ip }} 
+     profile {{ virtualnetwork.ipsec.profile }}
+   {% endif %}
+   {% if virtualnetwork.son %}
+     son-intf {{ virtualnetwork.son.name }} bind ipaddr {{ virtualnetwork.son.ip }} 
+   {% endif %}
+   {% if virtualnetwork.sctp %}
+     sctp endpoint {{ virtualnetwork.sctp.endpoint }} bind-address {{ virtualnetwork.interface.ip }} sctp-port 36412 sctp-profile default
+   {% endif %}
+   {% if virtualnetwork.gtpu %}
+      gtpu endpoint {{ virtualnetwork.gtpu.endpoint }} bind-address {{ virtualnetwork.interface.ip }} gtpu-port 2152 gtpu-profile default
+   {% endif %}
+{% endfor %}

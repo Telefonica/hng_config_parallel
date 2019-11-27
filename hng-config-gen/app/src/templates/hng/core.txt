@@ -1,0 +1,4 @@
+{% if hng.core %}
+packetcore lte mme {{ hng.core.name }} s1ap-layer sctp ipaddr {{ hng.core.ipaddr }} port {{ hng.core.port }}
+!
+{% endif %}

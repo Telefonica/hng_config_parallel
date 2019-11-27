@@ -1,0 +1,11 @@
+{% if hngv4.zone %}
+  {% for zenb in hngv4.zone.zenbs %}
+    venb-zone {{ zenb.name }} emergency-aread-id 012 plmn mcc {{ zenb.mcc }} mnc {{ zenb.mnc }} home true
+    {% for tac in zenb.tacs %}
+      tracking-are-code {{ tac.id }}
+    {% endfor %}
+  {% endfor %}
+  {% for zrnc in hngv4.zone.zrncs %}
+    vrnc-zone {{ zrnc.name }} plmn mcc {{ zrnc.mcc }} mnc {{ zrnc.mnc }} home true
+  {% endfor %} 
+{% endif %}

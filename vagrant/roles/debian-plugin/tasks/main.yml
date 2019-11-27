@@ -1,0 +1,4 @@
+---
+- name: Install Vagrant plugins
+  command: "vagrant plugin install vagrant-libvirt"
+  become: no
